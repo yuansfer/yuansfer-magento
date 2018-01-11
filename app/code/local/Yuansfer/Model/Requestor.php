@@ -67,7 +67,7 @@ class Requestor
     public function handleApiError($rbody, $rcode, $rheaders, $resp, $param)
     {
         if (!is_array($resp) || !isset($resp['error'])) {
-            $msg = "Invalid response object from API77777777: $rbody "
+            $msg = "Invalid response object from API: $rbody "
                 . "(HTTP response code was $rcode)";
         } else {
             $msg = isset($resp['message']) ? $resp['message'] : null;

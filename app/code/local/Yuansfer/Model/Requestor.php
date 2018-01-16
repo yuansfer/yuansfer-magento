@@ -13,19 +13,18 @@ class Requestor
 //        $order = $payment->getOrder();
 
         $httpClient = CurlClient::instance();
-        $url = 'https://mapi.yuansfer.com/appTransaction/securepayRefund';
+        $url = 'https://mapi.yuansfer.com/appTransaction/v2/securepayRefund';
         if ($this->debug) {
-            $url = 'https://mapi.yuansfer.yunkeguan.com/appTransaction/securepayRefund';
+            $url = 'https://mapi.yuansfer.yunkeguan.com/appTransaction/v2/securepayRefund';
         }
 
         $params = array(
             'merchantNo' => $merchantNo,
             'storeNo' => $storeNo,
-            'yuansferToken' => $token,
             'amount' => $amount,
             'reference' => $transactionId,
-            'reason' => '',
         );
+        $params = $this->addSign($params, $token);
 
         $this->log('send to ' . $url . ' with params:' . print_r($params, true));
 
@@ -36,8 +35,8 @@ class Requestor
         $this->log('response: ' . print_r($resp, true));
 
         if (
-            !isset($resp['result']['status']) ||
-            $resp['result']['status'] !== 'success'
+            !isset($resp['ret_code']) ||
+            $resp['ret_code'] !== '000100'
         ) {
             throw new ErrorException('Order refund failed!');
         }
@@ -95,9 +94,9 @@ class Requestor
     public function getSecureForm($merchantNo, $storeNo, $token, $vendor, $order, $ipn, $callback)
     {
         $httpClient = CurlClient::instance();
-        $url = 'https://mapi.yuansfer.com/appTransaction/securepay';
+        $url = 'https://mapi.yuansfer.com/appTransaction/v2/securepay';
         if ($this->debug) {
-            $url = 'https://mapi.yuansfer.yunkeguan.com/appTransaction/securepay';
+            $url = 'https://mapi.yuansfer.yunkeguan.com/appTransaction/v2/securepay';
         }
         //$headers = array('Authorization: Bearer ' . $token);
 
@@ -110,7 +109,6 @@ class Requestor
         $params = array(
             'merchantNo' => $merchantNo,
             'storeNo' => $storeNo,
-            'yuansferToken' => $token,
             'amount' => $order->getGrandTotal(),
             'vendor' => $vendor,
             'currency' => $order->getOrderCurrencyCode(),
@@ -120,8 +118,8 @@ class Requestor
             'terminal' => $this->ismobile() ? 'WAP' : 'ONLINE',
             'description' => $product,
             'note' => sprintf('#%s(%s)', $order->getRealOrderId(), $order->getCustomerEmail()),
-            'timeout' => 120
         );
+        $params = $this->addSign($params, $token);
 
         $this->log('send to ' . $url . ' with params:' . print_r($params, true));
 
@@ -185,5 +183,25 @@ class Requestor
         return $is_mobile;
     }
 
+    /**
+     * @param array $params
+     * @param string $token
+     *
+     * @return mixed
+     */
+    protected function addSign($params, $token)
+    {
+        unset($params['verifySign']);
 
+        ksort($params, SORT_STRING);
+        $str = '';
+        foreach ($params as $k => $v) {
+            $str .= $k . '=' . $v . '&';
+        }
+        $sig = md5($str . md5($token));
+
+        $params['verifySign'] = $sig;
+
+        return $params;
+    }
 }

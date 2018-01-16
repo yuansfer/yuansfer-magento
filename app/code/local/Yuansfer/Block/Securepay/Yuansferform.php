@@ -23,7 +23,14 @@ class Yuansfer_Block_Securepay_Yuansferform extends Mage_Core_Block_Abstract
         $oOrder = Mage::getModel('sales/order')->loadByIncrementId($sOrderId);
 
         $ipn = Mage::getUrl('yuansfer/securePay/ipn');
-        $callback = Mage::getUrl('yuansfer/securePay/callback');
+        $callback = Mage::getUrl('yuansfer/securePay/callback', array(
+            '_query' => array(
+                'status' => '{status}',
+                'amount' => '{amount}',
+                'reference' => '{reference}',
+                'note' => '{note}'
+            )
+        ));
 
         $methodCode = $oOrder->getPayment()->getMethod();
         $this->log('current method=' . $methodCode);

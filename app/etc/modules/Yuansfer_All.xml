@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <config>
   <modules>
-    <Yuansfer>
+    <Yuansfer_All>
       <active>true</active>
       <codePool>local</codePool>
        
       <depends>
         <Mage_Payment />
       </depends>
-    </Yuansfer>
+    </Yuansfer_All>
   </modules>
 </config>

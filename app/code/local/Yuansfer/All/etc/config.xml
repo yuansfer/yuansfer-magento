@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Yuansfer_All>
+      <version>1.0.0</version>
+    </Yuansfer_All>
+  </modules>
+
+  <global>
+    <helpers>
+      <yuansfer_all>
+        <class>Yuansfer_All_Helper</class>
+      </yuansfer_all>
+    </helpers>
+
+    <blocks>
+      <yuansfer_all>
+        <class>Yuansfer_All_Block</class>
+      </yuansfer_all>
+    </blocks>
+
+    <models>
+      <yuansfer_all>
+        <class>Yuansfer_All_Model</class>
+      </yuansfer_all>
+
+    </models>
+  </global>
+
+  <default>
+    <payment>
+      <yuansfer_alipay>
+        <active>1</active>
+        <model>yuansfer_all/alipaymethod</model>
+        <order_status>pending_payment</order_status>
+        <title>Yuansfer AliPay</title>
+        <allowspecific>0</allowspecific>
+        <payment_action>sales</payment_action>
+      </yuansfer_alipay>
+
+      <yuansfer_unionpay>
+        <active>1</active>
+        <model>yuansfer_all/unionpaymethod</model>
+        <order_status>pending_payment</order_status>
+        <title>Yuansfer UnionPay</title>
+        <allowspecific>0</allowspecific>
+        <payment_action>sales</payment_action>
+      </yuansfer_unionpay>
+
+      <yuansfer_wechatpay>
+        <active>1</active>
+        <model>yuansfer_all/wechatpaymethod</model>
+        <order_status>pending_payment</order_status>
+        <title>Yuansfer WechatPay</title>
+        <allowspecific>0</allowspecific>
+        <payment_action>sales</payment_action>
+      </yuansfer_wechatpay>
+
+    </payment>
+  </default>
+
+
+  <frontend>
+    <routers>
+      <yuansfer_all>
+        <use>standard</use>
+        <args>
+          <module>Yuansfer_All</module>
+          <frontName>yuansfer</frontName>
+        </args>
+      </yuansfer_all>
+    </routers>
+  </frontend>
+
+</config>

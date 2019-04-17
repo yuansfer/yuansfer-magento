@@ -8,4 +8,4 @@
 
 ## Note
 
-If you If you can not find "Yuansfer Module" option in "Payment Methods", Please confirm interface program file is in the root directory of the website, then refresh the site cache(Select menu: System->Cache Management).
+If you can not find "Yuansfer Module" option in "Payment Methods", Please confirm interface program file is in the root directory of the website, then refresh the site cache(Select menu: System->Cache Management).

@@ -115,7 +115,8 @@ class Requestor
             'reference' => $this->getReferenceCode($order->getIncrementId()),
             'ipnUrl' => $ipn,
             'callbackUrl' => $callback,
-            'terminal' => $this->ismobile() ? 'WAP' : 'ONLINE',
+            // 'terminal' => $this->ismobile() ? 'WAP' : 'ONLINE',
+            'terminal' => $this->ismobile() ? (2 == $this->ismobile() ? 'ALIPAY' : 'WAP') : 'ONLINE',
             'description' => $product,
             'note' => sprintf('#%s(%s)', $order->getRealOrderId(), $order->getCustomerEmail()),
         );
@@ -178,6 +179,11 @@ class Requestor
 
         if (stripos($_SERVER['HTTP_USER_AGENT'], 'windows') > 0) {
             $is_mobile = 0;
+        }
+
+        if (preg_match('/(alipayclient)/i',
+            strtolower($_SERVER['HTTP_USER_AGENT']))) {
+            $is_mobile = 2;
         }
 
         return $is_mobile;
